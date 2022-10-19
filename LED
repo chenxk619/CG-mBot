@@ -1,0 +1,18 @@
+#include <MeMCore.h>
+MeRGBLed led(0,30); // Based on hardware connections on mCore; cannot change
+void setup() {
+ led.setpin(13);
+}
+void loop() {
+ led.setColor(255, 255, 255); // set both LEDs to white colour
+ led.show(); // Must use .show() to make new colour take effect
+ delay(500);
+ led.setColorAt(0, 255, 0, 0); // set Right LED to Red
+ led.setColorAt(1, 0, 0, 255); // set Left LED to Blue
+ led.show();
+ delay(500);
+ led.setColorAt(0, 0, 0, 255); // set Right LED to Blue
+ led.setColorAt(1, 255, 0, 0); // set Left LED to Red
+ led.show();
+ delay(500);
+}
