@@ -1,0 +1,30 @@
+#include "MeMCore.h"
+#define TURNING_TIME_MS 330 // The time duration (ms) for turning
+MeDCMotor leftMotor(M1); // assigning leftMotor to port M1
+MeDCMotor rightMotor(M2); // assigning RightMotor to port M2
+uint8_t motorSpeed = 255;
+// Setting motor speed to an integer between 1 and 255
+// The larger the number, the faster the speed
+void setup()
+{
+ // Any setup code here runs only once:
+ delay(10000); // Do nothing for 10000 ms = 10 seconds
+}
+void loop()
+{
+ // The main code here will run repeatedly (i.e., looping):
+ // Going forward:
+ leftMotor.run(-motorSpeed); // Negative: wheel turns anti-clockwise
+ rightMotor.run(motorSpeed); // Positive: wheel turns clockwise
+ delay(1000); // Keep going straight for 1000 ms
+ leftMotor.stop(); // Stop left motor
+ rightMotor.stop(); // Stop right motor
+ delay(1000); // Stop for 1000 ms
+ // Turning left (on the spot):
+ leftMotor.run(motorSpeed); // Positive: wheel turns clockwise
+ rightMotor.run(motorSpeed); // Positive: wheel turns clockwise
+ delay(TURNING_TIME_MS); // Keep turning left for this time duration
+ leftMotor.stop(); // Stop left motor
+ rightMotor.stop(); // Stop right motor
+ delay(1000); // Stop for 1000 ms
+}
