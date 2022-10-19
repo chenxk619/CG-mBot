@@ -1,9 +1,13 @@
-#include "MeMCore.h"
+#include "MeMCore.h" //
 #define TURNING_TIME_MS 330 // The time duration (ms) for turning
 MeDCMotor leftMotor(M1); // assigning leftMotor to port M1
 MeDCMotor rightMotor(M2); // assigning RightMotor to port M2
 MeBuzzer buzzer; //create buzzer object
 #define LIGHTSENSOR A6 // internally connected to analog pin A6 in mCore
+#define TIMEOUT 2000 // Max microseconds to wait; choose according to max distance of wall
+#define SPEED_OF_SOUND 340 // Update according to your own experiment
+#define ULTRASONIC 10 // 
+#define SERIAL_DEBUGGER 1
 
 uint8_t motorSpeed = 255;
 // Setting motor speed to an integer between 1 and 255
@@ -52,9 +56,11 @@ void celebrate() {
 }
 
 int status = 0;
+
 void setup()
 {
  pinMode(A7, INPUT); // Setup A7 as input for the push button
+ Serial.begin(9600); // to initialize the serial monitor
 }
 
 void loop()
@@ -74,11 +80,19 @@ void loop()
       turn_left();
       turn_right();  
     }
-  }
+  
 
   //inside the LED function
+  /*
   if (end)
   {
-  celebrate(); // play the tune specified in the function celebrate()
+    celebrate(); // play the tune specified in the function celebrate()
+  }
+  */
+  
+  if (SERIAL_DEBUGGER)
+  {
+    Serial.println("TEST");
+  }
   }
 }
