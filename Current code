@@ -1,0 +1,84 @@
+#include "MeMCore.h"
+#define TURNING_TIME_MS 330 // The time duration (ms) for turning
+MeDCMotor leftMotor(M1); // assigning leftMotor to port M1
+MeDCMotor rightMotor(M2); // assigning RightMotor to port M2
+MeBuzzer buzzer; //create buzzer object
+#define LIGHTSENSOR A6 // internally connected to analog pin A6 in mCore
+
+uint8_t motorSpeed = 255;
+// Setting motor speed to an integer between 1 and 255
+// The larger the number, the faster the speed
+
+void move_forward() {
+  // Turning right (on the spot):
+   leftMotor.run(motorSpeed); // run left motor
+   rightMotor.run(motorSpeed); //run right motor
+   delay(TURNING_TIME_MS); //delay
+   leftMotor.stop(); // Stop left motor
+   rightMotor.stop(); // Stop right motor
+   delay(1000); // Stop for 1000 ms
+}
+
+void turn_right() {
+  // Turning right (on the spot):
+   leftMotor.run(motorSpeed); // run left motor
+   rightMotor.run(-motorSpeed); // reverse right motor
+   delay(TURNING_TIME_MS); // delay
+   leftMotor.stop(); // Stop left motor
+   rightMotor.stop(); // Stop right motor
+   delay(1000); // Stop for 1000 ms
+}
+
+void turn_left() {
+  // Turning left (on the spot):
+   leftMotor.run(-motorSpeed); // reverse left motor
+   rightMotor.run(motorSpeed); // run right motor
+   delay(TURNING_TIME_MS); // delay
+   leftMotor.stop(); // Stop left motor
+   rightMotor.stop(); // Stop right motor
+   delay(1000); // Stop for 1000 ms
+}
+
+void celebrate() {
+ // Each of the following "function calls" plays a single tone.
+ // The numbers in the bracket specify the frequency and the duration (ms)
+ buzzer.tone(392, 200);
+ buzzer.tone(523, 200);
+ buzzer.tone(659, 200);
+ buzzer.tone(784, 200);
+ buzzer.tone(659, 150);
+ buzzer.tone(784, 400);
+ buzzer.noTone();
+}
+
+int status = 0;
+void setup()
+{
+ pinMode(A7, INPUT); // Setup A7 as input for the push button
+}
+
+void loop()
+{
+ if (analogRead(A7) < 100) 
+ { // If push button is pushed, the value will be very low
+  status = 1 - status; // Toggle status
+  delay(500); // Delay 500ms so that a button push won't be counted multiple times.
+ }
+
+ //if button is pushed then run
+  if (status == 1)
+  {
+    for (int i = 0; i < 2; i += 1)
+    {
+      move_forward();
+      turn_left();
+      turn_right();  
+    }
+  }
+
+  //inside the LED function
+  if (end)
+  {
+  celebrate(); // play the tune specified in the function celebrate()
+  }
+}
