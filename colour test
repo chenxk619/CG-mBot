@@ -1,0 +1,97 @@
+#include "MeMCore.h" //mCore library
+#define RGBWait 200 //time delay for the RGB led in milliseconds
+#define LDRWait 10 //time delay before LDR takes in another reading in milliseconds
+MePort outputMeasure(PORT_3);
+MePort inputCtrl(PORT_4);
+
+//floats to hold colour arrays
+float colourArray[] = {0, 0, 0};
+float whiteArray[] = {0, 0, 0};
+float blackArray[] = {0, 0, 0};
+float greyDiff[] = {0, 0, 0};
+
+//placeholder to turn on led
+int s1[] = {HIGH, HIGH, LOW};
+int s2[] = {HIGH, LOW, HIGH};
+
+int averageReading(int times) {
+  //calculate the average reading for th requested number of times of scanning LDR
+  int reading;
+  int total = 0;
+  for (int i = 0; i < times; i++) {
+    reading = outputMeasure.aRead2();
+    total = reading + total;
+    delay(LDRWait);
+  }
+  return total/times;
+}
+
+void setBalance() {
+  //set white balance
+  Serial.println("Put white sample for calibration...");
+  delay(5000);
+  inputCtrl.dWrite1(LOW);
+  inputCtrl.dWrite2(LOW);
+  for (int i = 0; i <= 2; i++) {
+    inputCtrl.dWrite1(s1[i]); //turn led on
+    inputCtrl.dWrite2(s2[i]);
+    delay(RGBWait);
+    whiteArray[i] = averageReading(5);
+    inputCtrl.dWrite1(LOW);
+    inputCtrl.dWrite2(LOW);
+    delay(RGBWait);
+  }
+
+  //set black balance
+  Serial.println("Put black sample for calibration...");
+  delay(5000);
+  for (int i = 0; i <= 2; i++) {
+    inputCtrl.dWrite1(s1[i]); //turn led on
+    inputCtrl.dWrite2(s2[i]);
+    delay(RGBWait);
+    blackArray[i] = averageReading(5);
+    inputCtrl.dWrite1(LOW);
+    inputCtrl.dWrite2(LOW);
+    delay(RGBWait);
+    greyDiff[i] = whiteArray[i] - blackArray[i]; //difference between the max and min will give the range
+  }
+
+  Serial.println("Colour sensor is ready.");
+  delay(5000);
+  
+}
+
+void setup() {
+  //begin serial communication
+  Serial.begin(9600);
+  
+  //calibration
+  setBalance();
+}
+
+void loop() {
+  //turn on one colour led at a time and LDR takes average from 5 readings
+  for (int i = 0; i <= 2; i++) {
+    inputCtrl.dWrite1(s1[i]);
+    inputCtrl.dWrite2(s2[i]);
+    delay(RGBWait);
+    colourArray[i] = averageReading(5); //get average of 5 consecutive readings for the current colour
+    colourArray[i] = (colourArray[i] - blackArray[i]) / (greyDiff[i]) * 255; //correction of colour
+    inputCtrl.dWrite1(LOW);
+    inputCtrl.dWrite2(LOW);
+    delay(RGBWait);
+    Serial.print(int(colourArray[i]));
+    Serial.print(' ');
+  }
+  Serial.println('.');
+}
+11:36
+
+Reply
+Copy Selected Text
+Pin
+Forward
+Select
+Report
+Delete
+
