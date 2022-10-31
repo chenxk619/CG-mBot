@@ -1,0 +1,89 @@
+//placeholder for all the rgb values. To be determined during lab-time
+int Min_white_red_intensity;
+int Min_white_green_intensity;
+int Min_white_blue_intensity;
+int Max_white_red_intensity;
+int Max_white_green_intensity;
+int Max_white_blue_intensity;
+int Min_orange_red_intensity;
+int Min_orange_green_intensity;
+int Min_orange_blue_intensity;
+int Max_orange_red_intensity;
+int Max_orange_green_intensity;
+int Max_orange_blue_intensity;
+int Min_green_red_intensity;
+int Min_green_green_intensity;
+int Min_green_blue_intensity;
+int Max_green_red_intensity;
+int Max_green_green_intensity;
+int Max_green_blue_intensity;
+int Min_purple_red_intensity;
+int Min_purple_green_intensity;
+int Min_purple_blue_intensity;
+int Max_purple_red_intensity;
+int Max_purple_green_intensity;
+int Max_purple_blue_intensity;
+int Min_lightblue_red_intensity;
+int Min_lightblue_green_intensity;
+int Min_lightblue_blue_intensity;
+int Max_lightblue_red_intensity;
+int Max_lightblue_green_intensity;
+int Max_lightblue_blue_intensity;
+int Min_red_red_intensity;
+int Min_red_green_intensity;
+int Min_red_blue_intensity;
+int Max_red_red_intensity;
+int Max_red_green_intensity;
+int Max_red_blue_intensity;
+int Min_black_red_intensity;
+int Min_black_green_intensity;
+int Min_black_blue_intensity;
+int Max_black_red_intensity;
+int Max_black_green_intensity;
+int Max_black_blue_intensity;
+
+void check_colour(long red_intensity, long green_intensity, long blue_intensity) {
+  if ((red_intensity >= Min_white_red_intensity && red_intensity <= Max_white_red_intensity) ||
+      (green_intensity >= Min_white_green_intensity && green_intensity <= Max_white_green_intensity) ||
+      (blue_intensity >= Min_white_blue_intensity && blue_intensity <= Max_white_blue_intensity)) {
+        //when white is detected stop the mbot.
+        stop_move();
+      }
+  if ((red_intensity >= Min_red_red_intensity && red_intensity <= Max_red_red_intensity) ||
+      (green_intensity >= Min_red_green_intensity && green_intensity <= Max_red_green_intensity) ||
+      (blue_intensity >= Min_red_blue_intensity && blue_intensity <= Max_red_blue_intensity)) {
+        //when red is detected do a left-turn on the spot.
+        turn_left();    
+      }
+  if ((red_intensity >= Min_green_red_intensity && red_intensity <= Max_green_red_intensity) ||
+      (green_intensity >= Min_green_green_intensity && green_intensity <= Max_green_green_intensity) ||
+      (blue_intensity >= Min_green_blue_intensity && blue_intensity <= Max_green_blue_intensity)) {
+        //when green is detected do a right-turn on the spot.
+        turn_right();
+      }
+  if ((red_intensity >= Min_orange_red_intensity && red_intensity <= Max_orange_red_intensity) ||
+      (green_intensity >= Min_orange_green_intensity && green_intensity <= Max_orange_green_intensity) ||
+      (blue_intensity >= Min_orange_blue_intensity && blue_intensity <= Max_orange_blue_intensity)) {
+        //when orange is detected do two successive right-turns on the spot.
+        turn_right();
+        turn_right();
+      }
+  if ((red_intensity >= Min_purple_red_intensity && red_intensity <= Max_purple_red_intensity) ||
+      (green_intensity >= Min_purple_green_intensity && green_intensity <= Max_purple_green_intensity) ||
+      (blue_intensity >= Min_purple_blue_intensity && blue_intensity <= Max_purple_blue_intensity)) {
+        //when purple is detected do two successive left-turns in two grids.
+        move_forward();
+        turn_left();
+        move_forward();
+        turn_left();
+      }
+  if ((red_intensity >= Min_lightblue_red_intensity && red_intensity <= Max_lightblue_red_intensity) ||
+      (green_intensity >= Min_lightblue_green_intensity && green_intensity <= Max_lightblue_green_intensity) ||
+      (blue_intensity >= Min_lightblue_blue_intensity && blue_intensity <= Max_lightblue_blue_intensity)) {
+        //when light blue is detected do two successive right-turns in two grids.
+        move_forward();
+        turn_right();
+        move_forward();
+        turn_right();
+      }    
+}
